@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import toast from "react-hot-toast";
+import Link from "next/link"
 
 interface Task {
     id: number;
@@ -92,28 +93,6 @@ export default function Dashboard(){
         }
     }
 
-    const handleToggle = async(id: number)=>{
-        try {
-            await api(`/api/tasks/${id}/toggle`,"PATCH")
-            toast.success("Task updated")
-
-            getTasks()
-        } catch (error) {
-            toast.error("Failed to update task")
-        }
-    }
-
-    const handleDelete = async(id: number)=>{
-        try {
-            await api(`/api/tasks/${id}`,"DELETE")
-            toast.success("Task Deleted")
-
-            getTasks()
-
-        } catch (error) {
-            toast.error("Failed to delete task")
-        }
-    }
 
     const handleLogout = async()=>{
         try {
@@ -142,104 +121,142 @@ export default function Dashboard(){
     }, [search, filter]);
 
     return (
-        <div className="min-h-screen bg-gray-100 p-8">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">My Tasks</h1>
+    <div className="min-h-screen bg-gray-100 flex justify-center py-6 px-3 sm:py-10 sm:px-4">
+        <div className="w-full max-w-3xl bg-white rounded-xl shadow-md p-4 sm:p-8">
 
-                <button onClick={handleLogout} className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700">
-                    Logout
-                </button>
-            </div>
+        
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+            My Tasks
+            </h1>
 
-            <div className="flex gap-2 mb-4">
-                <select value={filter} onChange={(e)=>setFilter(e.target.value)} className="border p-2 rounded">
-                    <option value="all">ALL</option>
-                    <option value="completed">Completed</option>
-                    <option value= "pending">Pending</option>
-                </select>
-
-                <button onClick={getTasks} className="bg-gray-600 text-white px-4 rounded hover:bg-gray-700">
-                    Apply
-                </button>
-            </div>
-
-            <div className="flex gap-2 mb-4">
-                <input
-                type = "Text"
-                placeholder="Search Tasks "
-                className="flex-1 border p-2 rounded"
-                value={search}
-                onChange={(e)=>setSearch(e.target.value)}>
-
-                </input>
-
-                <button onClick={getTasks} className="bg-gray-600 text-white px-4 rounded hover:bg-gray-700">
-                    Search
-                </button>
-            </div>
-
-            <div className="flex gap-2 mb-6">
-
-                <input
-                type = "Text"
-                placeholder="Enter new task"
-                className="flex-1 border p-2 rounded"
-                value={newTitle}
-                onChange={(e)=>setNewTitle(e.target.value)}>
-
-                </input>
-
-                <button onClick={handleCreateTask} className="bg-blue-600-text-white px-4 rounded hover:bg-blue-700">
-                Add
-                </button>
-            
-            </div>
-            
-            {loading ? (
-                <p>Loading</p>
-            ) : tasks.length === 0 ? (
-                <p>No Tasks found</p>
-            ): (
-                
-                <ul className="space-y-3">
-                    {tasks.map((task)=>(
-                        <li key={task.id} className="bg-white p4 rounded shadow flex justify-between items-center">
-                            <div className="flex items-center gap-4">
-                            <span className={task.completed ? "line-through text-gray-500" : ""}>
-                                {task.title}
-                            </span>
-
-                            <button onClick={()=> handleToggle(task.id)} className="text-blue-600 text-sm hover:underline">
-                                Toggle
-                            </button>
-
-                            <button onClick={()=> handleDelete(task.id)} className="text-red-600-sm hover:underline">
-                                Delete
-                            </button>
-                            </div>
-
-                            <span className= {task.completed ? "text-green-600 text-sm" : "text-yellow-600 text-sm"}>
-                                {task.completed ? "Completed" : "Pending"}
-                            </span>
-                            
-                        </li>
-                    ))}
-                </ul>
-            )}
-
-            <div className="flex justify-center items-center gap-4 mt-6">
-                <button disabled = {page === 1} onClick={()=>setPage(page-1)} className="px-4 py-1 bg-gray-300 rounded disabled:opacity-50">
-                    Previous
-                </button>
-                <span>
-                    Page {page} of {totalPages}
-                </span>
-
-                <button disabled = {page === totalPages} onClick={()=>setPage(page+1)} className="px-4 py-1 bg-gray-300 rounded disabled:opacity-50">
-                    Next
-                </button>
-            </div>
+            <button
+            onClick={handleLogout}
+            className="w-full sm:w-auto bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+            >
+            Logout
+            </button>
         </div>
-    )
+
+        
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+            <select
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+            >
+            <option value="all">All</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+            </select>
+
+            <button
+            onClick={getTasks}
+            className="w-full sm:w-auto bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+            >
+            Apply
+            </button>
+        </div>
+
+        
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+            <input
+            type="text"
+            placeholder="Search tasks..."
+            className="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            />
+
+            <button
+            onClick={getTasks}
+            className="w-full sm:w-auto bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+            >
+            Search
+            </button>
+        </div>
+
+        
+        <div className="flex flex-col sm:flex-row gap-3 mb-8">
+            <input
+            type="text"
+            placeholder="Enter new task"
+            className="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+            />
+
+            <button
+            onClick={handleCreateTask}
+            className="w-full sm:w-auto bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition"
+            >
+            Add
+            </button>
+        </div>
+
+        
+        {loading ? (
+            <p className="text-center text-gray-500">Loading...</p>
+        ) : tasks.length === 0 ? (
+            <p className="text-center text-gray-500">No tasks found.</p>
+        ) : (
+            <ul className="space-y-4">
+            {tasks.map((task) => (
+                <li
+                key={task.id}
+                className="border border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 hover:shadow-sm transition"
+                >
+                <Link href={`/tasks/${task.id}`}>
+                    <span
+                    className={`cursor-pointer text-base sm:text-lg ${
+                        task.completed
+                        ? "line-through text-gray-400"
+                        : "text-gray-800 hover:text-blue-600"
+                    }`}
+                    >
+                    {task.title}
+                    </span>
+                </Link>
+
+                <span
+                    className={`text-sm font-medium ${
+                    task.completed
+                        ? "text-green-600"
+                        : "text-yellow-600"
+                    }`}
+                >
+                    {task.completed ? "Completed" : "Pending"}
+                </span>
+                </li>
+            ))}
+            </ul>
+        )}
+
+        
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mt-10 text-center">
+            <button
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            className="w-full sm:w-auto px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-300 transition"
+            >
+            Previous
+            </button>
+
+            <span className="text-gray-700 font-medium">
+            Page {page} of {totalPages}
+            </span>
+
+            <button
+            disabled={page === totalPages}
+            onClick={() => setPage(page + 1)}
+            className="w-full sm:w-auto px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-300 transition"
+            >
+            Next
+            </button>
+        </div>
+
+        </div>
+    </div>
+);
 
 }
