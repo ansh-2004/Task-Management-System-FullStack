@@ -140,6 +140,18 @@ export const logout = async (req:AuthRequest, res:Response) =>{
             }
         })
 
+        res.clearCookie("accessToken",{
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax"
+        })
+
+        res.clearCookie("refreshToken",{
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax"
+        })
+
         res.status(200).json({success : true,message : "Logged out"})
     } catch (error) {
         console.log(error)
