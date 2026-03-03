@@ -75,7 +75,18 @@ export const login = async(req: Request, res: Response)=>{
             },
         })
 
-        res.status(200).json({accessToken,refreshToken})
+        res.cookie("accessToken",accessToken,{
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax"
+        })
+
+        res.cookie("refreshToken",refreshToken,{
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax"
+        })
+        res.status(200).json({message: "Login Successful"})
 
     } catch (error) {
         console.log(error)

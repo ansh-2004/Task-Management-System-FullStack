@@ -11,20 +11,14 @@ export interface AuthRequest extends Request{
 
 export const authenticate = (req: AuthRequest,res:Response,next : NextFunction)=>{
     try {
-        const header = req.headers.authorization
+        const token = req.cookies?.accessToken
 
-        if(!header){
-            return res.status(401).json({message : "token needed"})
+        if(!token){
+            return res.status(401).json({message : "not authorized , token needed"})
         }
 
-        console.log("header",header)
+        console.log("token",token)
 
-        const token = header.split(" ")[1]
-
-        if(!token) {
-            return res.status(401).json({message : "Token missing"})
-
-        }
         const decoded = jwt.verify(token,process.env.JWT_ACCESS_SECRET as string) 
 
 
