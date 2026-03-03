@@ -4,25 +4,25 @@ import { useState } from "react"
 import {useRouter} from "next/navigation"
 import { api } from "@/lib/api";
 import toast from "react-hot-toast";
-export default function Register(){
-    const router = useRouter()
 
-    const [name,setName] = useState("")
+export default function Login(){
+    const router = useRouter()
     const[email,setEmail] = useState("")
     const [password,setPassword] = useState("")
- 
+
 
     const handleSubmit = async(e: React.FormEvent)=>{
         e.preventDefault()
+        
+        
 
-        if(!name || !email || !password){
+        if(!email || !password){
             toast.error("Please fill all the fields")
             return;
         }
 
         try {
-            const data = await api("/api/auth/register","POST",{
-                name,
+            const data = await api("/api/auth/login","POST",{
                 email,
                 password
             })
@@ -30,10 +30,11 @@ export default function Register(){
             console.log(data)
 
             if(data.success === true){
-                toast.success("Registration successful, Redirecting you to login page...")
+                toast.success("Login successful")
                 setTimeout(()=>{
-                    router.push("/login")
-                },1000)
+                    router.push("/dashboard")
+                },800)
+                
             }else{
                 toast.error(data.message)
             }
@@ -45,15 +46,9 @@ export default function Register(){
     return(
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="bg-white p-8 rounded shadow-md w-96">
-                <h2 className="text-2xl font-bold mb-6 text-center">Registration</h2>
+                <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <input
-                    type = "text"
-                    placeholder="Enter your Name"
-                    className="w-full border p-2 rounded"
-                    value={name}
-                    onChange={(e)=> setName(e.target.value)}
-                    />
+                    
 
                     <input
                     type = "email"
@@ -71,14 +66,14 @@ export default function Register(){
                     onChange={(e)=> setPassword(e.target.value)}
                     />
 
-                    <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"> Register </button>
+                    <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"> Login </button>
                     
                 </form>
 
                 <p className="text-sm mt-4 text-center">
-                    Already have an account?{" "}
-                    <span className="text-blue-600 cursor-pointer" onClick={()=>router.push("/login")}>
-                        Login
+                    Don't have an account?{" "}
+                    <span className="text-blue-600 cursor-pointer" onClick={()=>router.push("/register")}>
+                        Register
                     </span>
                 </p>
             </div>
