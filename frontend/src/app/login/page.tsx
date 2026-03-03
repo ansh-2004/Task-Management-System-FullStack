@@ -65,8 +65,7 @@ export default function Login(){
                 placeholder="Enter your email"
                 className="mt-1 w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
+                onChange={(e) => setEmail(e.target.value)}/>
             </div>
 
             <div>
@@ -78,14 +77,12 @@ export default function Login(){
                 placeholder="Enter your password"
                 className="mt-1 w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
+                onChange={(e) => setPassword(e.target.value)}/>
             </div>
 
             <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 transition font-medium"
-            >
+            className="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 transition font-medium">
             Login
             </button>
 
@@ -96,8 +93,7 @@ export default function Login(){
             Don't have an account?{" "}
             <span
             className="text-blue-600 hover:underline cursor-pointer font-medium"
-            onClick={() => router.push("/register")}
-            >
+            onClick={() => router.push("/register")}>
             Register
             </span>
         </p>

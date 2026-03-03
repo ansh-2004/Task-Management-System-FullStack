@@ -114,8 +114,7 @@ export default function TaskDetail(){
             <input
             className="mt-1 border border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            />
+            onChange={(e) => setTitle(e.target.value)}/>
         </div>
 
        
@@ -128,8 +127,7 @@ export default function TaskDetail(){
                 task?.completed
                     ? "bg-green-100 text-green-600"
                     : "bg-yellow-100 text-yellow-600"
-                }`}
-            >
+                }`}>
                 {task?.completed ? "Completed" : "Pending"}
             </span>
             </div>
@@ -145,29 +143,25 @@ export default function TaskDetail(){
 
             <button
             onClick={handleUpdate}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-medium"
-            >
+            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-medium">
             Save Changes
             </button>
 
             <button
             onClick={handleToggle}
-            className="w-full bg-yellow-500 text-white py-3 rounded-lg hover:bg-yellow-600 transition font-medium"
-            >
+            className="w-full bg-yellow-500 text-white py-3 rounded-lg hover:bg-yellow-600 transition font-medium">
             {task?.completed ? "Mark as Pending" : "Mark as Completed"}
             </button>
 
             <button
             onClick={handleDelete}
-            className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition font-medium"
-            >
+            className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition font-medium">
             Delete Task
             </button>
 
             <button
             onClick={() => router.push("/dashboard")}
-            className="w-full bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300 transition font-medium"
-            >
+            className="w-full bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300 transition font-medium">
             Back to Dashboard
             </button>
 

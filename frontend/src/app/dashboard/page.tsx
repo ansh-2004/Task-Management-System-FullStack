@@ -132,8 +132,7 @@ export default function Dashboard(){
 
             <button
             onClick={handleLogout}
-            className="w-full sm:w-auto bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-            >
+            className="w-full sm:w-auto bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
             Logout
             </button>
         </div>
@@ -143,8 +142,7 @@ export default function Dashboard(){
             <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
-            >
+            className="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400">
             <option value="all">All</option>
             <option value="completed">Completed</option>
             <option value="pending">Pending</option>
@@ -152,8 +150,7 @@ export default function Dashboard(){
 
             <button
             onClick={getTasks}
-            className="w-full sm:w-auto bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
-            >
+            className="w-full sm:w-auto bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition">
             Apply
             </button>
         </div>
@@ -165,13 +162,11 @@ export default function Dashboard(){
             placeholder="Search tasks..."
             className="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            />
+            onChange={(e) => setSearch(e.target.value)}/>
 
             <button
             onClick={getTasks}
-            className="w-full sm:w-auto bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
-            >
+            className="w-full sm:w-auto bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition">
             Search
             </button>
         </div>
@@ -183,13 +178,11 @@ export default function Dashboard(){
             placeholder="Enter new task"
             className="w-full border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             value={newTitle}
-            onChange={(e) => setNewTitle(e.target.value)}
-            />
+            onChange={(e) => setNewTitle(e.target.value)}/>
 
             <button
             onClick={handleCreateTask}
-            className="w-full sm:w-auto bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition"
-            >
+            className="w-full sm:w-auto bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition">
             Add
             </button>
         </div>
@@ -201,33 +194,27 @@ export default function Dashboard(){
             <p className="text-center text-gray-500">No tasks found.</p>
         ) : (
             <ul className="space-y-4">
-            {tasks.map((task) => (
-                <li
-                key={task.id}
-                className="border border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 hover:shadow-sm transition"
-                >
-                <Link href={`/tasks/${task.id}`}>
+                {tasks.map((task) => (
+                    <Link key={task.id} href={`/tasks/${task.id}`} className="block">
+                    <li
+                        className="border border-gray-200 rounded-lg p-4 
+                        flex flex-col sm:flex-row sm:justify-between sm:items-center 
+                        gap-2 hover:shadow-md hover:bg-gray-50 transition cursor-pointer">
                     <span
-                    className={`cursor-pointer text-base sm:text-lg ${
-                        task.completed
-                        ? "line-through text-gray-400"
-                        : "text-gray-800 hover:text-blue-600"
-                    }`}
-                    >
+                    className={`text-base sm:text-lg ${ task.completed ? "line-through text-gray-400" : "text-gray-800"}`}>
                     {task.title}
                     </span>
-                </Link>
 
                 <span
-                    className={`text-sm font-medium ${
+                className={`text-sm font-medium ${
                     task.completed
-                        ? "text-green-600"
-                        : "text-yellow-600"
-                    }`}
-                >
+                    ? "text-green-600"
+                    : "text-yellow-600"
+                }`}>
                     {task.completed ? "Completed" : "Pending"}
-                </span>
+                    </span>
                 </li>
+                </Link>
             ))}
             </ul>
         )}
@@ -237,8 +224,7 @@ export default function Dashboard(){
             <button
             disabled={page === 1}
             onClick={() => setPage(page - 1)}
-            className="w-full sm:w-auto px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-300 transition"
-            >
+            className="w-full sm:w-auto px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-300 transition">
             Previous
             </button>
 
@@ -249,14 +235,13 @@ export default function Dashboard(){
             <button
             disabled={page === totalPages}
             onClick={() => setPage(page + 1)}
-            className="w-full sm:w-auto px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-300 transition"
-            >
+            className="w-full sm:w-auto px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-300 transition">
             Next
             </button>
         </div>
 
         </div>
     </div>
-);
+    );
 
 }
