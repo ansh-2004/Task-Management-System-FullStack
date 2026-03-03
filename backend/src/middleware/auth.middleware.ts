@@ -1,8 +1,11 @@
+import dotenv from "dotenv"
+dotenv.config()
+
 import {Request, Response, NextFunction} from 'express'
 
 import jwt from 'jsonwebtoken'
 
-interface AuthRequest extends Request{
+export interface AuthRequest extends Request{
     userId? : number
 }
 
@@ -22,7 +25,7 @@ export const authenticate = (req: AuthRequest,res:Response,next : NextFunction)=
             return res.status(401).json({message : "Token missing"})
 
         }
-        const decoded = jwt.verify(token,process.env.JWT_REFRESH_SECRET as string) 
+        const decoded = jwt.verify(token,process.env.JWT_ACCESS_SECRET as string) 
 
 
         console.log(decoded)
@@ -37,6 +40,6 @@ export const authenticate = (req: AuthRequest,res:Response,next : NextFunction)=
 
     } catch (error) {
         console.log(error)
-        return res.status(500).json({message : "Server error"})
+        return res.status(500).json({message : "token expired"})
     }
 }

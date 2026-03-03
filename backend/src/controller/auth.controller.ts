@@ -3,6 +3,7 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import prisma from "../prisma/client"
 import { generateAccessToken,generateRefrestToken } from "../utils/generateTokens"
+import { AuthRequest } from "../middleware/auth.middleware"
 
 export const register = async (req: Request, res:Response)=>{
     try {
@@ -115,13 +116,13 @@ export const refreshToken = async (req: Request, res: Response)=>{
     }
 }
 
-export const logout = async (req:Request, res:Response) =>{
+export const logout = async (req:AuthRequest, res:Response) =>{
     try {
-        const {userId} = req.body
+        
 
         await prisma.user.update({
             where : {
-                id : userId
+                id : req.userId!
             },
             data : {
                 refreshToken : null
