@@ -12,13 +12,13 @@ export const register = async (req: Request, res:Response)=>{
         console.log(email)
 
         if(!email || !password){
-            return res.status(400).json({message : "Please enter your emal and password"})
+            return res.status(400).json({success : false,message : "Please enter your emal and password"})
         }
 
         const userExist = await prisma.user.findUnique({where : {email}})
 
         if(userExist){
-            return res.status(400).json({message : "User already exist"})
+            return res.status(400).json({success : false,message : "User already exist"})
         }
 
         const hash = await bcrypt.hash(password,10)
@@ -32,7 +32,7 @@ export const register = async (req: Request, res:Response)=>{
 
         console.log(user)
 
-        res.status(201).json({message : "User created successfully"})
+        res.status(201).json({success : true, message : "User created successfully"})
 
     } catch (error) {
         console.log(error)
@@ -47,20 +47,20 @@ export const login = async(req: Request, res: Response)=>{
         console.log(email)
 
         if(!email || !password){
-            return res.status(400).json({message : "Please enter your emal and password"})
+            return res.status(400).json({success : false,message : "Please enter your emal and password"})
         }
 
         const user = await prisma.user.findUnique({where : {email}})
         console.log(user)
 
         if(!user){
-            return res.status(400).json({message : "You need to register first"})
+            return res.status(400).json({success : false,message : "You need to register first"})
         }
 
         const isValid = await bcrypt.compare(password,user.password)
 
         if(!isValid){
-            return res.status(400).json({message: "Incorrect Password "})
+            return res.status(400).json({success : false,message: "Incorrect Password "})
         }
 
         const accessToken = generateAccessToken(user.id)
@@ -86,7 +86,7 @@ export const login = async(req: Request, res: Response)=>{
             secure: false,
             sameSite: "lax"
         })
-        res.status(200).json({message: "Login Successful"})
+        res.status(200).json({success : true,message: "Login Successful"})
 
     } catch (error) {
         console.log(error)
@@ -99,7 +99,7 @@ export const refreshToken = async (req: Request, res: Response)=>{
         const {refreshToken} = req.body 
 
         if(!refreshToken){
-            res.status(401).json({message: "Refresh token needed"})
+            res.status(401).json({success : false,message: "Refresh token needed"})
         }
 
         const decoded = jwt.verify(refreshToken,process.env.JWT_REFRESH_SECRET as string) as {userId: number}
@@ -114,12 +114,12 @@ export const refreshToken = async (req: Request, res: Response)=>{
         console.log(user)
 
         if(!user || user.refreshToken != refreshToken){
-            return res.status(403).json({message : "refresh token invalid"})
+            return res.status(403).json({success : false,message : "refresh token invalid"})
         }
 
         const newAccessToken = generateAccessToken(user.id)
 
-        res.json({accessToken : newAccessToken})
+        res.status(200).json({success : true,accessToken : newAccessToken})
 
     } catch (error) {
         console.log(error)
@@ -140,7 +140,7 @@ export const logout = async (req:AuthRequest, res:Response) =>{
             }
         })
 
-        res.status(200).json({message : "Logged out"})
+        res.status(200).json({success : true,message : "Logged out"})
     } catch (error) {
         console.log(error)
         res.status(500).json({message : "Server error"})

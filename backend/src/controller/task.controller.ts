@@ -10,7 +10,7 @@ export const createTask = async (req: AuthRequest, res: Response)=>{
         console.log("title",title)
 
         if(!title || title.trim() === ""){
-            return res.status(400).json({message : "Please enter your task"})
+            return res.status(400).json({success : false, message : "Please enter your task"})
         }
 
         const task = await prisma.task.create({
@@ -20,7 +20,7 @@ export const createTask = async (req: AuthRequest, res: Response)=>{
             },
         })
 
-         res.status(201).json(task)
+         res.status(201).json({success : true,task})
 
     } catch (error) {
         console.log(error)
@@ -65,7 +65,7 @@ export const getTasks = async(req: AuthRequest,res: Response)=>{
 
         console.log("tasks",tasks)
 
-         res.status(200).json(tasks)
+         res.status(200).json({success : true,tasks})
 
 
     } catch (error) {
@@ -85,10 +85,10 @@ export const getTaskById = async(req:AuthRequest,res: Response)=>{
         })
 
         if(!task){
-            return res.status(404).json({message: "Task not found"})
+            return res.status(404).json({success : false,message: "Task not found"})
         }
 
-        return res.status(200).json(task)
+        return res.status(200).json({success : true,task})
         
     } catch (error) {
         console.log(error)
@@ -102,7 +102,7 @@ export const updateTask = async (req: AuthRequest, res: Response)=>{
         const {title} = req.body 
 
         if(!title || title.trim() === "") {
-            return res.status(400).json({message : "Please enter your updated task"}) 
+            return res.status(400).json({success : false,message : "Please enter your updated task"}) 
         }
         console.log(title)
 
@@ -114,7 +114,7 @@ export const updateTask = async (req: AuthRequest, res: Response)=>{
             data: {title}
         })
 
-         res.status(200).json(task)
+         res.status(200).json({success : true,task})
 
     } catch (error) {
         console.log(error)
@@ -133,7 +133,7 @@ export const deleteTask = async(req: AuthRequest,res:Response)=>{
             }
         })
 
-        res.status(200).json({message: "Task deleted"})
+        res.status(200).json({success : true,message: "Task deleted"})
 
     } catch (error) {
         console.log(error)
@@ -154,7 +154,7 @@ export const toggleTask = async (req: AuthRequest, res: Response)=>{
         })
 
         if(!task){
-            return res.status(404).json({message: "Task not found"})
+            return res.status(404).json({success : false,message: "Task not found"})
         }
 
         const updated = await prisma.task.update({
@@ -164,7 +164,7 @@ export const toggleTask = async (req: AuthRequest, res: Response)=>{
             }
         })
 
-         res.status(200).json(updated)
+         res.status(200).json({success : true,updated})
 
     } catch (error) {
         console.log(error)

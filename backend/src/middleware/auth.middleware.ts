@@ -14,7 +14,7 @@ export const authenticate = (req: AuthRequest,res:Response,next : NextFunction)=
         const token = req.cookies?.accessToken
 
         if(!token){
-            return res.status(401).json({message : "not authorized , token needed"})
+            return res.status(401).json({success : false,message : "not authorized , token needed"})
         }
 
         console.log("token",token)
@@ -26,7 +26,7 @@ export const authenticate = (req: AuthRequest,res:Response,next : NextFunction)=
         console.log(typeof decoded)
 
         if(typeof decoded === "string"){
-            return res.status(401).json({message: "token invalid"})
+            return res.status(401).json({success : false,message: "token invalid"})
         }
         
         req.userId = decoded.userId as number 
@@ -34,6 +34,6 @@ export const authenticate = (req: AuthRequest,res:Response,next : NextFunction)=
 
     } catch (error) {
         console.log(error)
-        return res.status(500).json({message : "token expired"})
+        return res.status(500).json({success : false,message : "token expired"})
     }
 }
