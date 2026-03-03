@@ -53,6 +53,10 @@ export const getTasks = async(req: AuthRequest,res: Response)=>{
             }
         }
 
+        const total = await prisma.task.count({
+            where : whereClause
+        })
+
         console.log(whereClause)
 
         const tasks = await prisma.task.findMany({
@@ -62,10 +66,11 @@ export const getTasks = async(req: AuthRequest,res: Response)=>{
             orderBy: {createdAt: "desc"}
         })
 
+        const totalPages = Math.ceil(total / limit)
 
         console.log("tasks",tasks)
 
-         res.status(200).json({success : true,tasks})
+         res.status(200).json({success : true,tasks,total,page,totalPages})
 
 
     } catch (error) {

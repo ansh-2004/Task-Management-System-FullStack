@@ -96,7 +96,11 @@ export const login = async(req: Request, res: Response)=>{
 
 export const refreshToken = async (req: Request, res: Response)=>{
     try {
-        const {refreshToken} = req.body 
+        console.log("refresh token controller")
+        
+        const refreshToken = req.cookies.refreshToken
+        
+        console.log('refresh token',refreshToken)
 
         if(!refreshToken){
             res.status(401).json({success : false,message: "Refresh token needed"})
@@ -119,7 +123,13 @@ export const refreshToken = async (req: Request, res: Response)=>{
 
         const newAccessToken = generateAccessToken(user.id)
 
-        res.status(200).json({success : true,accessToken : newAccessToken})
+        res.cookie("accessToken",newAccessToken,{
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax"
+        })
+        
+        res.status(200).json({success : true,message : "Access token refreshed"})
 
     } catch (error) {
         console.log(error)

@@ -32,8 +32,18 @@ export const authenticate = (req: AuthRequest,res:Response,next : NextFunction)=
         req.userId = decoded.userId as number 
         next()
 
-    } catch (error) {
+    } catch (error: any) {
         console.log(error)
-        return res.status(500).json({success : false,message : "token expired"})
+        if (error.name === "TokenExpiredError") {
+            return res.status(401).json({
+            success: false,
+            message: "token expired",
+            });
+        }
+
+        return res.status(401).json({
+            success: false,
+            message: "invalid token",
+        });
     }
 }

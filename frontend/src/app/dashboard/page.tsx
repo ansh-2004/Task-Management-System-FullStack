@@ -19,12 +19,42 @@ export default function Dashboard(){
 
     const [newTitle,setNewTitle] = useState("")
 
+    const [search,setSearch] = useState("")
+
+    const [filter,setFilter] = useState("all")
+
+    const [page,setPage] = useState(1)
+    const [totalPages,setTotalPages] = useState(1)
+    const limit = 5
+
     const getTasks = async()=>{
         setLoading(true)
 
         try {
-            const data = await api('/api/tasks')
+            let url = "/api/tasks"
+
+            const params = new URLSearchParams()
+
+            if(search){
+                params.append("search",search)
+            }
+
+            if(filter !== "all"){
+                params.append("status",filter)
+            }
+
+            params.append("page",page.toString())
+            params.append("limit",limit.toString())
+
+            
+            url += `?${params.toString()}`
+            
+
+
+            const data = await api(url)
+
             console.log("data",data)
+
             if(data.success === false) {
                 toast.error("You need to Login first")
                 router.push('/login')
@@ -32,6 +62,7 @@ export default function Dashboard(){
             }
             
             setTasks(data.tasks)
+            setTotalPages(data.totalPages)
 
         } catch (error) {
             toast.error("Failed to get your tasks")
@@ -98,7 +129,17 @@ export default function Dashboard(){
     }
     useEffect(()=>{
         getTasks()
-    },[])
+    },[page])
+
+    useEffect(() => {
+        if (search === "") {
+        getTasks();
+        }
+    }, [search]);
+
+    useEffect(() => {
+        setPage(1);
+    }, [search, filter]);
 
     return (
         <div className="min-h-screen bg-gray-100 p-8">
@@ -109,7 +150,36 @@ export default function Dashboard(){
                     Logout
                 </button>
             </div>
+
+            <div className="flex gap-2 mb-4">
+                <select value={filter} onChange={(e)=>setFilter(e.target.value)} className="border p-2 rounded">
+                    <option value="all">ALL</option>
+                    <option value="completed">Completed</option>
+                    <option value= "pending">Pending</option>
+                </select>
+
+                <button onClick={getTasks} className="bg-gray-600 text-white px-4 rounded hover:bg-gray-700">
+                    Apply
+                </button>
+            </div>
+
+            <div className="flex gap-2 mb-4">
+                <input
+                type = "Text"
+                placeholder="Search Tasks "
+                className="flex-1 border p-2 rounded"
+                value={search}
+                onChange={(e)=>setSearch(e.target.value)}>
+
+                </input>
+
+                <button onClick={getTasks} className="bg-gray-600 text-white px-4 rounded hover:bg-gray-700">
+                    Search
+                </button>
+            </div>
+
             <div className="flex gap-2 mb-6">
+
                 <input
                 type = "Text"
                 placeholder="Enter new task"
@@ -156,6 +226,19 @@ export default function Dashboard(){
                     ))}
                 </ul>
             )}
+
+            <div className="flex justify-center items-center gap-4 mt-6">
+                <button disabled = {page === 1} onClick={()=>setPage(page-1)} className="px-4 py-1 bg-gray-300 rounded disabled:opacity-50">
+                    Previous
+                </button>
+                <span>
+                    Page {page} of {totalPages}
+                </span>
+
+                <button disabled = {page === totalPages} onClick={()=>setPage(page+1)} className="px-4 py-1 bg-gray-300 rounded disabled:opacity-50">
+                    Next
+                </button>
+            </div>
         </div>
     )
 
